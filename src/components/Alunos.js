@@ -7,8 +7,23 @@ class Aluno extends React.Component {
         super(props);
 
         this.state = {
-            alunos: []
+            transacoes: []
         };
+    }
+
+    componentDidMount(){
+        fetch("https://localhost:7022/api/transacao/despesa/cartao?idCartao=3")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        transacoes: result
+                    });
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
     }
 
     render() {
@@ -16,17 +31,35 @@ class Aluno extends React.Component {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Opcoes</th>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Categoria</th>
+                        <th>Banco ID</th>
+                        <th>Cartão ID</th>
+                        <th>Tipo de Transação</th>
+                        <th>Opções</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Luiz</td>
-                        <td>email@email.com</td>
-                        <td>Atualizar | Excluir</td>
-                    </tr>
+                    {
+                        this.state.transacoes.map((transacao) => {
+                            return (
+                                <tr key={transacao.id}>
+                                    <td>{transacao.id}</td>
+                                    <td>{transacao.descricao}</td>
+                                    <td>{transacao.valor}</td>
+                                    <td>{transacao.data}</td>
+                                    <td>{transacao.categoria}</td>
+                                    <td>{transacao.bancoId}</td>
+                                    <td>{transacao.cartaoId}</td>
+                                    <td>{transacao.tipoTransacao}</td>
+                                    <td>Atualizar | Excluir</td>
+                                </tr>
+                            );
+                        })
+                    }
                 </tbody>
             </Table>
         );
